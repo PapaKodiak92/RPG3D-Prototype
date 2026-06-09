@@ -50,7 +50,9 @@ func _physics_process(_delta: float) -> void:
     velocity.z = direction.z * move_speed
 
     # Turn the player to face where they are walking.
-    look_at(Vector3(destination.x, global_position.y, destination.z), Vector3.UP)
+    var look_target := Vector3(destination.x, global_position.y, destination.z)
+    if global_position.distance_to(look_target) > 0.01:
+        look_at(look_target, Vector3.UP)
 
     move_and_slide()
 
@@ -65,9 +67,18 @@ func set_destination_from_mouse(mouse_position: Vector2) -> void:
     var ray_end := ray_origin + ray_direction * 1000.0
 
     var query := PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+
+    # Important: do not let the mouse click hit the player body.
+    # We only want clicks on the world/ground.
+    query.exclude = [get_rid()]
+
     var result := get_world_3d().direct_space_state.intersect_ray(query)
 
     if result.has("position"):
-        destination = result["position"]
+        var clicked_position: Vector3 = result["position"]
+
+        # Keep the destination on the player's walking level.
+        # This prevents clicks on tall objects from making weird Y values.
+        destination = Vector3(clicked_position.x, global_position.y, clicked_position.z)
         has_destination = true
-        print("Walking to: ", destination)
+        print("Walking to ground point: ", destination)
