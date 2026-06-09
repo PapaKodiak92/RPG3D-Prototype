@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://b1n40jesjlfqx"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_70y50"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7ku4c"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nbmxt"]
+
+[node name="StarterWorld" type="Node3D" unique_id=66125613]
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=2140060838]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+mesh = SubResource("PlaneMesh_70y50")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=900956034]
+
+[node name="PlayerMesh" type="MeshInstance3D" parent="Player" unique_id=566301434]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_7ku4c")
+
+[node name="PlayerCollision" type="CollisionShape3D" parent="Player" unique_id=1722447248]
+shape = SubResource("CapsuleShape3D_nbmxt")
+
+[node name="MainCamera" type="Camera3D" parent="." unique_id=1095988226]
+transform = Transform3D(1, 0, 0, 0, 0.81915206, 0.57357645, 0, -0.57357645, 0.81915206, 0, 8, 10)
+current = true
+
+[node name="Sunlight" type="DirectionalLight3D" parent="." unique_id=1000888920]
+transform = Transform3D(0.81915206, -0.4055798, 0.4055798, 0, 0.70710677, 0.70710677, -0.57357645, -0.579228, 0.579228, 0, 0, 0)
