@@ -6,8 +6,8 @@ Today we are building the very first tiny 3D world for **RPG3D Prototype**.
 
 By the end, the game will have:
 
-- A ground area
-- A player placeholder
+- A solid ground area
+- A visible player placeholder
 - A camera
 - A light
 - A saved starter scene
@@ -31,6 +31,29 @@ Node = one LEGO piece
 Scene = a small LEGO build
 Game = many scenes working together
 ```
+
+---
+
+## Important correction
+
+For this project, the ground should be built like this:
+
+```text
+StarterWorld
+  Ground                 StaticBody3D
+    GroundMesh           MeshInstance3D
+    GroundCollision      CollisionShape3D
+```
+
+The simple explanation:
+
+```text
+Ground = the solid floor object
+GroundMesh = what our eyes see
+GroundCollision = what the game can click and stand on
+```
+
+Do **not** make `Ground` a `MeshInstance3D` root. That makes the lesson harder and easier to mess up.
 
 ---
 
@@ -93,41 +116,9 @@ res://scenes/world/StarterWorld.tscn
 
 ---
 
-## Step 3: Add the ground
+## Step 3: Add the solid ground node
 
 Right-click `StarterWorld` and add:
-
-```text
-MeshInstance3D
-```
-
-Rename it:
-
-```text
-Ground
-```
-
-With `Ground` selected, set its mesh:
-
-```text
-Inspector > Mesh > New PlaneMesh
-```
-
-Set the PlaneMesh size to:
-
-```text
-Size: 20, 20
-```
-
-This gives us a flat area to stand on.
-
----
-
-## Step 4: Add a ground collision shape
-
-The ground needs collision so the player can stand on it later.
-
-Right-click `Ground` and add:
 
 ```text
 StaticBody3D
@@ -136,10 +127,87 @@ StaticBody3D
 Rename it:
 
 ```text
-GroundBody
+Ground
 ```
 
-Right-click `GroundBody` and add:
+This node is the solid floor body.
+
+Set `Ground` transform:
+
+```text
+Position X: 0
+Position Y: 0
+Position Z: 0
+
+Rotation X: 0
+Rotation Y: 0
+Rotation Z: 0
+
+Scale X: 1
+Scale Y: 1
+Scale Z: 1
+```
+
+---
+
+## Step 4: Add the visible ground mesh
+
+Right-click `Ground` and add:
+
+```text
+MeshInstance3D
+```
+
+Rename it:
+
+```text
+GroundMesh
+```
+
+Select `GroundMesh`.
+
+In the Inspector, find:
+
+```text
+Mesh
+```
+
+Choose:
+
+```text
+New PlaneMesh
+```
+
+Open the `PlaneMesh` settings and set:
+
+```text
+Size X: 30
+Size Y: 30
+```
+
+Set `GroundMesh` transform:
+
+```text
+Position X: 0
+Position Y: 0
+Position Z: 0
+
+Rotation X: 0
+Rotation Y: 0
+Rotation Z: 0
+
+Scale X: 1
+Scale Y: 1
+Scale Z: 1
+```
+
+This is the part of the ground we can see.
+
+---
+
+## Step 5: Add the ground collision
+
+Right-click `Ground` and add:
 
 ```text
 CollisionShape3D
@@ -151,29 +219,61 @@ Rename it:
 GroundCollision
 ```
 
-With `GroundCollision` selected, set:
+Select `GroundCollision`.
+
+In the Inspector, find:
 
 ```text
-Shape: New BoxShape3D
+Shape
 ```
 
-Set the BoxShape3D size to:
+Choose:
 
 ```text
-Size X: 20
-Size Y: 0.1
-Size Z: 20
+New BoxShape3D
 ```
 
-Move `GroundBody` slightly down:
+Open the `BoxShape3D` settings and set:
 
 ```text
-Position Y: -0.05
+Size X: 30
+Size Y: 0.2
+Size Z: 30
+```
+
+Set `GroundCollision` transform:
+
+```text
+Position X: 0
+Position Y: -0.1
+Position Z: 0
+
+Rotation X: 0
+Rotation Y: 0
+Rotation Z: 0
+
+Scale X: 1
+Scale Y: 1
+Scale Z: 1
+```
+
+This is the part of the ground the game can click and collide with.
+
+Very important:
+
+```text
+Correct:
+GroundCollision Scale = 1, 1, 1
+BoxShape3D Size = 30, 0.2, 30
+
+Wrong:
+GroundCollision Scale = 30, 0.2, 30
+BoxShape3D Size = 1, 1, 1
 ```
 
 ---
 
-## Step 5: Create a simple player placeholder
+## Step 6: Create a simple player placeholder
 
 Right-click `StarterWorld` and add:
 
@@ -187,6 +287,28 @@ Rename it:
 Player
 ```
 
+Set `Player` transform:
+
+```text
+Position X: 0
+Position Y: 1
+Position Z: 0
+
+Rotation X: 0
+Rotation Y: 0
+Rotation Z: 0
+
+Scale X: 1
+Scale Y: 1
+Scale Z: 1
+```
+
+The `Player` node is the main body that will move later.
+
+---
+
+## Step 7: Add the visible player mesh
+
 Right-click `Player` and add:
 
 ```text
@@ -199,23 +321,48 @@ Rename it:
 PlayerMesh
 ```
 
-With `PlayerMesh` selected, set:
+Select `PlayerMesh`.
+
+In the Inspector, find:
 
 ```text
-Mesh: New CapsuleMesh
+Mesh
 ```
 
-Set the player position:
+Choose:
+
+```text
+New CapsuleMesh
+```
+
+Open the `CapsuleMesh` settings and set:
+
+```text
+Radius: 0.4
+Height: 2.0
+```
+
+Set `PlayerMesh` transform:
 
 ```text
 Position X: 0
-Position Y: 1
+Position Y: 0
 Position Z: 0
+
+Rotation X: 0
+Rotation Y: 0
+Rotation Z: 0
+
+Scale X: 1
+Scale Y: 1
+Scale Z: 1
 ```
+
+This is the part of the player we can see.
 
 ---
 
-## Step 6: Add player collision
+## Step 8: Add player collision
 
 Right-click `Player` and add:
 
@@ -229,17 +376,48 @@ Rename it:
 PlayerCollision
 ```
 
-With `PlayerCollision` selected, set:
+Select `PlayerCollision`.
+
+In the Inspector, find:
 
 ```text
-Shape: New CapsuleShape3D
+Shape
+```
+
+Choose:
+
+```text
+New CapsuleShape3D
+```
+
+Open the `CapsuleShape3D` settings and set:
+
+```text
+Radius: 0.4
+Height: 2.0
+```
+
+Set `PlayerCollision` transform:
+
+```text
+Position X: 0
+Position Y: 0
+Position Z: 0
+
+Rotation X: 0
+Rotation Y: 0
+Rotation Z: 0
+
+Scale X: 1
+Scale Y: 1
+Scale Z: 1
 ```
 
 This lets the player have a body in the world.
 
 ---
 
-## Step 7: Add a camera
+## Step 9: Add a camera
 
 Right-click `StarterWorld` and add:
 
@@ -262,6 +440,9 @@ Position Z: 10
 Rotation X: -35
 Rotation Y: 0
 Rotation Z: 0
+Scale X: 1
+Scale Y: 1
+Scale Z: 1
 ```
 
 With `MainCamera` selected, enable:
@@ -274,7 +455,7 @@ This tells Godot which camera the player should see through.
 
 ---
 
-## Step 8: Add sunlight
+## Step 10: Add sunlight
 
 Right-click `StarterWorld` and add:
 
@@ -300,7 +481,39 @@ This gives the scene light so we can see the world.
 
 ---
 
-## Step 9: Set the main scene
+## Final scene tree
+
+Your scene tree should look like this:
+
+```text
+StarterWorld
+  Ground
+    GroundMesh
+    GroundCollision
+  Player
+    PlayerMesh
+    PlayerCollision
+  MainCamera
+  SunLight
+```
+
+Node types should be:
+
+```text
+StarterWorld = Node3D
+Ground = StaticBody3D
+GroundMesh = MeshInstance3D
+GroundCollision = CollisionShape3D
+Player = CharacterBody3D
+PlayerMesh = MeshInstance3D
+PlayerCollision = CollisionShape3D
+MainCamera = Camera3D
+SunLight = DirectionalLight3D
+```
+
+---
+
+## Step 11: Set the main scene
 
 Click:
 
@@ -324,7 +537,7 @@ Close Project Settings.
 
 ---
 
-## Step 10: Press Play
+## Step 12: Press Play
 
 Press the Play button.
 
@@ -337,13 +550,15 @@ You should see:
 
 If the view is black, check the camera and light.
 
-If the player is missing, check the player position.
+If the player is missing, select `PlayerMesh` and make sure its mesh is `CapsuleMesh`.
 
-If the ground is missing, check the ground mesh size.
+If the ground is missing, select `GroundMesh` and make sure its mesh is `PlaneMesh`.
+
+If there is a yellow warning on `GroundCollision`, select `GroundCollision` and make sure it has `BoxShape3D` assigned.
 
 ---
 
-## Step 11: Save your work to Git
+## Step 13: Save your work to Git
 
 Go back to PowerShell inside the project folder:
 
@@ -392,6 +607,9 @@ Good questions to ask:
 
 - What is a node?
 - What is a scene?
+- Which node is the solid floor?
+- Which node is the visible floor?
+- Which node lets the game click the floor?
 - Which node is the player?
 - Which node lets us see the game?
 - Which node lights the game?
@@ -405,8 +623,12 @@ The goal is not speed. The goal is understanding.
 
 - [ ] Godot project opens
 - [ ] `StarterWorld.tscn` exists
-- [ ] Ground is visible
-- [ ] Player placeholder is visible
+- [ ] Ground is a `StaticBody3D`
+- [ ] `GroundMesh` is visible
+- [ ] `GroundCollision` has `BoxShape3D`
+- [ ] Player is a `CharacterBody3D`
+- [ ] `PlayerMesh` has `CapsuleMesh`
+- [ ] `PlayerCollision` has `CapsuleShape3D`
 - [ ] Camera is working
 - [ ] Light is working
 - [ ] Scene runs when Play is pressed
