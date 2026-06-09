@@ -53,9 +53,9 @@ func move_toward_destination() -> void:
         return
 
     # We only care about X and Z for walking on the ground.
-    var flat_position := Vector3(global_position.x, 0.0, global_position.z)
-    var flat_destination := Vector3(destination.x, 0.0, destination.z)
-    var direction := flat_destination - flat_position
+    var flat_position: Vector3 = Vector3(global_position.x, 0.0, global_position.z)
+    var flat_destination: Vector3 = Vector3(destination.x, 0.0, destination.z)
+    var direction: Vector3 = flat_destination - flat_position
 
     # Stop when we are close enough to the clicked spot.
     if direction.length() <= stop_distance:
@@ -70,7 +70,7 @@ func move_toward_destination() -> void:
     velocity.z = direction.z * move_speed
 
     # Turn the player to face where they are walking.
-    var look_target := Vector3(destination.x, global_position.y, destination.z)
+    var look_target: Vector3 = Vector3(destination.x, global_position.y, destination.z)
     if global_position.distance_to(look_target) > 0.01:
         look_at(look_target, Vector3.UP)
 
@@ -79,13 +79,13 @@ func handle_left_click(mouse_position: Vector2) -> void:
         print("No camera set. Drag MainCamera into the Player camera_path slot.")
         return
 
-    var result := raycast_from_mouse(mouse_position)
+    var result: Dictionary = raycast_from_mouse(mouse_position)
 
     if result.is_empty():
         return
 
-    var clicked_object := result.get("collider")
-    var clicked_position: Vector3 = result["position"]
+    var clicked_object: Object = result.get("collider") as Object
+    var clicked_position: Vector3 = result["position"] as Vector3
 
     # If the clicked object has an interact function, use it.
     if clicked_object != null and clicked_object.has_method("interact"):
@@ -99,11 +99,11 @@ func handle_left_click(mouse_position: Vector2) -> void:
 
 func raycast_from_mouse(mouse_position: Vector2) -> Dictionary:
     # The camera turns the 2D mouse position into a 3D ray.
-    var ray_origin := camera.project_ray_origin(mouse_position)
-    var ray_direction := camera.project_ray_normal(mouse_position)
-    var ray_end := ray_origin + ray_direction * 1000.0
+    var ray_origin: Vector3 = camera.project_ray_origin(mouse_position)
+    var ray_direction: Vector3 = camera.project_ray_normal(mouse_position)
+    var ray_end: Vector3 = ray_origin + ray_direction * 1000.0
 
-    var query := PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
+    var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
 
     # Important: do not let the mouse click hit the player body.
     # We only want clicks on the world/ground/objects.
