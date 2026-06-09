@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ktk20rndlm4e" path="res://scripts/player/ClickToMovePlayer.gd" id="1_7ku4c"]
 [ext_resource type="Script" uid="uid://ccn0cyqny3jvn" path="res://scripts/camera/FollowCamera.gd" id="2_nbmxt"]
+[ext_resource type="Script" uid="uid://cq0bch5mh513n" path="res://scripts/world/ClickableTree.gd" id="3_4b46o"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_7ku4c"]
 
@@ -11,6 +12,18 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nbmxt"]
 size = Vector3(60, 0.2, 60)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nbmxt"]
+top_radius = 0.25
+bottom_radius = 0.3
+
+[sub_resource type="SphereMesh" id="SphereMesh_4b46o"]
+radius = 1.0
+height = 1.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yjprv"]
+radius = 0.8
+height = 2.8
 
 [node name="StarterWorld" type="Node3D" unique_id=66125613]
 
@@ -42,3 +55,18 @@ mesh = SubResource("PlaneMesh_7ku4c")
 
 [node name="GroundCollision" type="CollisionShape3D" parent="Ground" unique_id=176868023]
 shape = SubResource("BoxShape3D_nbmxt")
+
+[node name="OakTree" type="StaticBody3D" parent="." unique_id=1105112484]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, 0)
+script = ExtResource("3_4b46o")
+
+[node name="TrunkMesh" type="MeshInstance3D" parent="OakTree" unique_id=1834370169]
+mesh = SubResource("CylinderMesh_nbmxt")
+
+[node name="LeavesMesh" type="MeshInstance3D" parent="OakTree" unique_id=854272290]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("SphereMesh_4b46o")
+
+[node name="TreeCollision" type="CollisionShape3D" parent="OakTree" unique_id=886469633]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("CapsuleShape3D_yjprv")
