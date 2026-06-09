@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ktk20rndlm4e" path="res://scripts/player/ClickToMovePlayer.gd" id="1_7ku4c"]
 [ext_resource type="Script" uid="uid://ccn0cyqny3jvn" path="res://scripts/camera/FollowCamera.gd" id="2_nbmxt"]
 [ext_resource type="Script" uid="uid://cq0bch5mh513n" path="res://scripts/world/ClickableTree.gd" id="3_4b46o"]
+[ext_resource type="Script" uid="uid://bndxge1rtbva0" path="res://scripts/ui/InventoryDisplay.gd" id="4_yjprv"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_7ku4c"]
 
@@ -70,3 +71,26 @@ mesh = SubResource("SphereMesh_4b46o")
 [node name="TreeCollision" type="CollisionShape3D" parent="OakTree" unique_id=886469633]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 shape = SubResource("CapsuleShape3D_yjprv")
+
+[node name="GameUI" type="CanvasLayer" parent="." unique_id=1717719269]
+
+[node name="InventoryDisplay" type="Control" parent="GameUI" unique_id=46680156]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_yjprv")
+player_path = NodePath("../../Player")
+
+[node name="InventoryPanel" type="Panel" parent="GameUI/InventoryDisplay" unique_id=1295798703]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 60.0
+
+[node name="LogLabel" type="Label" parent="GameUI/InventoryDisplay/InventoryPanel" unique_id=1940709963]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 15.0
+offset_right = 63.0
+offset_bottom = 38.0
+text = "Logs: 0"
