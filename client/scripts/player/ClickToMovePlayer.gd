@@ -1,5 +1,8 @@
 extends CharacterBody3D
 
+# This signal tells the UI that the player's inventory changed.
+signal inventory_changed(item_name: String, new_total: int)
+
 # How fast the player walks.
 # Bigger number = faster movement.
 @export var move_speed: float = 5.0
@@ -117,4 +120,13 @@ func add_item(item_name: String, amount: int) -> void:
 
 	inventory[item_name] += amount
 
-	print("Picked up ", amount, " ", item_name, ". Total: ", inventory[item_name])
+	var new_total: int = inventory[item_name]
+	inventory_changed.emit(item_name, new_total)
+
+	print("Picked up ", amount, " ", item_name, ". Total: ", new_total)
+
+func get_item_count(item_name: String) -> int:
+	if not inventory.has(item_name):
+		return 0
+
+	return inventory[item_name]
