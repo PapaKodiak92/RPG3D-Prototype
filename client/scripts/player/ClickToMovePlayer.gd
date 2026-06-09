@@ -16,6 +16,10 @@ extends CharacterBody3D
 var destination: Vector3
 var has_destination: bool = false
 
+# Tiny beginner inventory.
+# Example: inventory["Log"] = 3
+var inventory: Dictionary = {}
+
 @onready var camera: Camera3D = get_node(camera_path) as Camera3D
 
 func _ready() -> void:
@@ -26,7 +30,7 @@ func _unhandled_input(event: InputEvent) -> void:
     # This checks for a left mouse click.
     if event is InputEventMouseButton:
         if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-            set_destination_from_mouse(event.position)
+            handle_left_click(event.position)
 
 func _physics_process(delta: float) -> void:
     apply_gravity(delta)
@@ -70,11 +74,30 @@ func move_toward_destination() -> void:
     if global_position.distance_to(look_target) > 0.01:
         look_at(look_target, Vector3.UP)
 
-func set_destination_from_mouse(mouse_position: Vector2) -> void:
+func handle_left_click(mouse_position: Vector2) -> void:
     if camera == null:
         print("No camera set. Drag MainCamera into the Player camera_path slot.")
         return
 
+    var result := raycast_from_mouse(mouse_position)
+
+    if result.is_empty():
+        return
+
+    var clicked_object := result.get("collider")
+    var clicked_position: Vector3 = result["position"]
+
+    # If the clicked object has an interact function, use it.
+    if clicked_object != null and clicked_object.has_method("interact"):
+        clicked_object.interact(self)
+        return
+
+    # Otherwise, walk to where we clicked.
+    destination = Vector3(clicked_position.x, global_position.y, clicked_position.z)
+    has_destination = true
+    print("Walking to ground point: ", destination)
+
+func raycast_from_mouse(mouse_position: Vector2) -> Dictionary:
     # The camera turns the 2D mouse position into a 3D ray.
     var ray_origin := camera.project_ray_origin(mouse_position)
     var ray_direction := camera.project_ray_normal(mouse_position)
@@ -83,15 +106,15 @@ func set_destination_from_mouse(mouse_position: Vector2) -> void:
     var query := PhysicsRayQueryParameters3D.create(ray_origin, ray_end)
 
     # Important: do not let the mouse click hit the player body.
-    # We only want clicks on the world/ground.
+    # We only want clicks on the world/ground/objects.
     query.exclude = [get_rid()]
 
-    var result := get_world_3d().direct_space_state.intersect_ray(query)
+    return get_world_3d().direct_space_state.intersect_ray(query)
 
-    if result.has("position"):
-        var clicked_position: Vector3 = result["position"]
+func add_item(item_name: String, amount: int) -> void:
+    if not inventory.has(item_name):
+        inventory[item_name] = 0
 
-        # The click gives us X/Z. Gravity handles Y.
-        destination = Vector3(clicked_position.x, global_position.y, clicked_position.z)
-        has_destination = true
-        print("Walking to ground point: ", destination)
+    inventory[item_name] += amount
+
+    print("Picked up ", amount, " ", item_name, ". Total: ", inventory[item_name])
