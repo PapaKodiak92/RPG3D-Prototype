@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b1n40jesjlfqx"]
 
 [ext_resource type="Script" uid="uid://ktk20rndlm4e" path="res://scripts/player/ClickToMovePlayer.gd" id="1_7ku4c"]
+[ext_resource type="Script" uid="uid://ccn0cyqny3jvn" path="res://scripts/camera/FollowCamera.gd" id="2_nbmxt"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_7ku4c"]
 
@@ -9,7 +10,7 @@
 [sub_resource type="PlaneMesh" id="PlaneMesh_7ku4c"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nbmxt"]
-size = Vector3(30, 0.2, 30)
+size = Vector3(60, 0.2, 60)
 
 [node name="StarterWorld" type="Node3D" unique_id=66125613]
 
@@ -27,6 +28,8 @@ shape = SubResource("CapsuleShape3D_nbmxt")
 [node name="MainCamera" type="Camera3D" parent="." unique_id=1095988226]
 transform = Transform3D(1, 0, 0, 0, 0.81915206, 0.57357645, 0, -0.57357645, 0.81915206, 0, 8, 10)
 current = true
+script = ExtResource("2_nbmxt")
+target_path = NodePath("../Player")
 
 [node name="Sunlight" type="DirectionalLight3D" parent="." unique_id=1000888920]
 transform = Transform3D(0.81915206, -0.4055798, 0.4055798, 0, 0.70710677, 0.70710677, -0.57357645, -0.579228, 0.579228, 0, 0, 0)
@@ -34,7 +37,7 @@ transform = Transform3D(0.81915206, -0.4055798, 0.4055798, 0, 0.70710677, 0.7071
 [node name="Ground" type="StaticBody3D" parent="." unique_id=764363053]
 
 [node name="GroundMesh" type="MeshInstance3D" parent="Ground" unique_id=703006757]
-transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
+transform = Transform3D(60, 0, 0, 0, 60, 0, 0, 0, 60, 0, 0, 0)
 mesh = SubResource("PlaneMesh_7ku4c")
 
 [node name="GroundCollision" type="CollisionShape3D" parent="Ground" unique_id=176868023]
