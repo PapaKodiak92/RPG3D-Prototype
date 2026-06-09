@@ -1,24 +1,27 @@
 [gd_scene format=3 uid="uid://b1n40jesjlfqx"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_70y50"]
+[ext_resource type="Script" uid="uid://ktk20rndlm4e" path="res://scripts/player/ClickToMovePlayer.gd" id="1_7ku4c"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_7ku4c"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nbmxt"]
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_7ku4c"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nbmxt"]
+size = Vector3(30, 0.2, 30)
+
 [node name="StarterWorld" type="Node3D" unique_id=66125613]
 
-[node name="Ground" type="MeshInstance3D" parent="." unique_id=2140060838]
-transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
-mesh = SubResource("PlaneMesh_70y50")
-
 [node name="Player" type="CharacterBody3D" parent="." unique_id=900956034]
+script = ExtResource("1_7ku4c")
+camera_path = NodePath("../MainCamera")
 
 [node name="PlayerMesh" type="MeshInstance3D" parent="Player" unique_id=566301434]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_7ku4c")
 
-[node name="PlayerCollision" type="CollisionShape3D" parent="Player" unique_id=1722447248]
+[node name="PlayerCollision" type="CollisionShape3D" parent="Player" unique_id=590852747]
 shape = SubResource("CapsuleShape3D_nbmxt")
 
 [node name="MainCamera" type="Camera3D" parent="." unique_id=1095988226]
@@ -27,3 +30,12 @@ current = true
 
 [node name="Sunlight" type="DirectionalLight3D" parent="." unique_id=1000888920]
 transform = Transform3D(0.81915206, -0.4055798, 0.4055798, 0, 0.70710677, 0.70710677, -0.57357645, -0.579228, 0.579228, 0, 0, 0)
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=764363053]
+
+[node name="GroundMesh" type="MeshInstance3D" parent="Ground" unique_id=703006757]
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
+mesh = SubResource("PlaneMesh_7ku4c")
+
+[node name="GroundCollision" type="CollisionShape3D" parent="Ground" unique_id=176868023]
+shape = SubResource("BoxShape3D_nbmxt")
