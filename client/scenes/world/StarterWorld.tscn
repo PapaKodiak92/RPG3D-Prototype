@@ -9,7 +9,7 @@
 [node name="StarterWorld" type="Node3D" unique_id=66125613]
 
 [node name="Ground" type="MeshInstance3D" parent="." unique_id=2140060838]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+transform = Transform3D(30, 0, 0, 0, 30, 0, 0, 0, 30, 0, 0, 0)
 mesh = SubResource("PlaneMesh_70y50")
 
 [node name="Player" type="CharacterBody3D" parent="." unique_id=900956034]
